@@ -13,8 +13,11 @@
   const countEl = document.getElementById('prompt-count');
   const cardTemplate = document.getElementById('prompt-card-template');
   const sortSelect = document.getElementById('sort-select');
+  const searchInput = document.getElementById('search-input');
+  const themeToggle = document.getElementById('theme-toggle');
 
   let currentSort = 'newest';
+  let currentSearch = '';
 
   function loadPrompts() {
     try {
@@ -92,20 +95,33 @@
     }
   }
 
+  function filterPrompts(prompts, query) {
+    if (!query.trim()) return prompts;
+    const lowerQuery = query.toLowerCase();
+    return prompts.filter(p => {
+      const title = (p.title || '').toLowerCase();
+      const content = (p.content || '').toLowerCase();
+      return title.includes(lowerQuery) || content.includes(lowerQuery);
+    });
+  }
+
   function trim(str) { return (str || '').trim(); }
 
   function render(prompts) {
     listEl.innerHTML = '';
 
-    if (!prompts.length) {
+    const filteredPrompts = filterPrompts(prompts, currentSearch);
+
+    if (!filteredPrompts.length) {
       emptyEl.hidden = false;
+      emptyEl.querySelector('p').textContent = currentSearch ? 'No prompts match your search.' : 'No prompts saved yet. Add your first one!';
       countEl.textContent = '0';
       return;
     }
     emptyEl.hidden = true;
-    countEl.textContent = String(prompts.length);
+    countEl.textContent = String(filteredPrompts.length);
 
-    const sortedPrompts = sortPrompts(prompts, currentSort);
+    const sortedPrompts = sortPrompts(filteredPrompts, currentSort);
     const frag = document.createDocumentFragment();
     sortedPrompts.forEach(p => {
       const node = cardTemplate.content.firstElementChild.cloneNode(true);
@@ -309,8 +325,42 @@
         render(loadPrompts());
       });
     }
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        render(loadPrompts());
+      });
+    }
+    initTheme();
     render(loadPrompts());
     setupImportExport();
+  }
+
+  /* ================= Dark Mode ================= */
+  const THEME_KEY = 'promptLibrary.theme';
+
+  function initTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      if (themeToggle) themeToggle.textContent = 'Light';
+    }
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem(THEME_KEY, 'light');
+      themeToggle.textContent = 'Dark';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem(THEME_KEY, 'dark');
+      themeToggle.textContent = 'Light';
+    }
   }
 
   /* ================= Notes Feature ================= */

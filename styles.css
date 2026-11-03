@@ -92,6 +92,26 @@ h1, h2, h3 { line-height: 1.2; font-weight: 600; }
   box-shadow: 0 0 0 3px rgba(37,99,235,.25);
 }
 
+/* Search Input */
+.search-container { margin-bottom: .75rem; }
+.search-input {
+  width: 100%;
+  font: 500 .8rem system-ui;
+  padding: .55rem .75rem;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border-strong);
+  background: var(--panel-bg);
+  color: var(--text);
+  transition: border-color .15s, box-shadow .15s;
+}
+.search-input::placeholder { color: var(--text-soft); }
+.search-input:hover { border-color: var(--brand); }
+.search-input:focus {
+  outline: none;
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.25);
+}
+
 /* Form */
 form { display: flex; flex-direction: column; gap: 1.1rem; }
 .field-group { display: flex; flex-direction: column; gap: .4rem; }
@@ -263,4 +283,84 @@ button[type=submit]:focus-visible { outline: 2px solid var(--focus); outline-off
 
 @media (min-width: 760px) {
   .cards { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --bg: #1a1a2e;
+  --panel-bg: #16213e;
+  --border: #2a2a4a;
+  --border-strong: #3a3a5a;
+  --text: #e8e8e8;
+  --text-soft: #a0a0b0;
+  --brand: #4d7cff;
+  --brand-accent: #6b8eff;
+  --danger: #ff6b6b;
+  --danger-accent: #ff8585;
+  --focus: #4d7cff;
+}
+
+[data-theme="dark"] .app-header {
+  background: linear-gradient(90deg, #16213e, #1a1a2e);
+}
+
+[data-theme="dark"] .card {
+  background: linear-gradient(180deg, #1e2a4a, #16213e 60%);
+}
+
+[data-theme="dark"] input[type=text],
+[data-theme="dark"] textarea,
+[data-theme="dark"] .sort-select,
+[data-theme="dark"] .search-input {
+  background: #1a1a2e;
+  color: var(--text);
+}
+
+[data-theme="dark"] .tool-btn,
+[data-theme="dark"] .delete-btn,
+[data-theme="dark"] .add-note-btn,
+[data-theme="dark"] .note-buttons button,
+[data-theme="dark"] .note-controls button {
+  background: #1a1a2e;
+  color: var(--text-soft);
+}
+
+[data-theme="dark"] .note,
+[data-theme="dark"] .note textarea {
+  background: #1a1a2e;
+}
+
+[data-theme="dark"] .notes {
+  background: #121a30;
+}
+
+[data-theme="dark"] .prompt-meta-tag,
+[data-theme="dark"] .count-badge {
+  background: #2a2a4a;
+}
+
+[data-theme="dark"] .token-estimate {
+  background: #2a2a4a;
+}
+
+[data-theme="dark"] .token-estimate[data-confidence=high] {
+  background: #1a3a2a;
+  color: #6bcf8a;
+  border-color: #2a5a3a;
+}
+
+[data-theme="dark"] .token-estimate[data-confidence=medium] {
+  background: #3a3520;
+  color: #d4a84a;
+  border-color: #5a4a2a;
+}
+
+[data-theme="dark"] .token-estimate[data-confidence=low] {
+  background: #3a2020;
+  color: #e87070;
+  border-color: #5a2a2a;
+}
+
+[data-theme="dark"] .empty-state {
+  background: #121a30;
 }

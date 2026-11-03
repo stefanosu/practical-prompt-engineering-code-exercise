@@ -10,6 +10,7 @@
   <header class="app-header">
     <h1>Prompt Library</h1>
     <div class="header-tools" role="region" aria-label="Data tools">
+      <button type="button" id="theme-toggle" class="tool-btn" aria-label="Toggle dark mode">Dark</button>
       <button type="button" id="export-btn" class="tool-btn" aria-label="Export prompts">Export</button>
       <button type="button" id="import-btn" class="tool-btn" aria-label="Import prompts">Import</button>
       <input type="file" id="import-file" accept="application/json" hidden aria-hidden="true" />
@@ -57,6 +58,10 @@
         </div>
       </div>
       <div id="import-export-messages" class="iemessages" role="alert" aria-live="polite" hidden></div>
+      <div class="search-container">
+        <label for="search-input" class="visually-hidden">Search prompts</label>
+        <input type="text" id="search-input" class="search-input" placeholder="Search prompts..." aria-label="Search prompts" />
+      </div>
       <div id="prompts-empty" class="empty-state" hidden>
         <p>No prompts saved yet. Add your first one!</p>
       </div>
