@@ -70,6 +70,27 @@ h1, h2, h3 { line-height: 1.2; font-weight: 600; }
 }
 .panel-title { margin: 0 0 .75rem; font-size: 1.1rem; }
 .panel-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .75rem; }
+.panel-header-controls { display: flex; align-items: center; gap: .5rem; }
+
+/* Sort Dropdown */
+.sort-select {
+  font: 500 .7rem system-ui;
+  padding: .4rem .6rem;
+  padding-right: 1.5rem;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border-strong);
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2352606d' d='M3 4.5L6 8l3-3.5H3z'/%3E%3C/svg%3E") no-repeat right .5rem center;
+  appearance: none;
+  cursor: pointer;
+  color: var(--text);
+  transition: border-color .15s, box-shadow .15s;
+}
+.sort-select:hover { border-color: var(--brand); }
+.sort-select:focus {
+  outline: none;
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.25);
+}
 
 /* Form */
 form { display: flex; flex-direction: column; gap: 1.1rem; }

@@ -12,6 +12,9 @@
   const emptyEl = document.getElementById('prompts-empty');
   const countEl = document.getElementById('prompt-count');
   const cardTemplate = document.getElementById('prompt-card-template');
+  const sortSelect = document.getElementById('sort-select');
+
+  let currentSort = 'newest';
 
   function loadPrompts() {
     try {
@@ -63,6 +66,32 @@
     return 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
 
+  function sortPrompts(prompts, sortBy) {
+    const sorted = [...prompts];
+    switch (sortBy) {
+      case 'newest':
+        return sorted.sort((a, b) => new Date(b.metadata?.createdAt || 0) - new Date(a.metadata?.createdAt || 0));
+      case 'oldest':
+        return sorted.sort((a, b) => new Date(a.metadata?.createdAt || 0) - new Date(b.metadata?.createdAt || 0));
+      case 'rating-high':
+        return sorted.sort((a, b) => {
+          const ratingA = a.userRating ?? 0;
+          const ratingB = b.userRating ?? 0;
+          if (ratingB !== ratingA) return ratingB - ratingA;
+          return new Date(b.metadata?.createdAt || 0) - new Date(a.metadata?.createdAt || 0);
+        });
+      case 'rating-low':
+        return sorted.sort((a, b) => {
+          const ratingA = a.userRating ?? 6;
+          const ratingB = b.userRating ?? 6;
+          if (ratingA !== ratingB) return ratingA - ratingB;
+          return new Date(b.metadata?.createdAt || 0) - new Date(a.metadata?.createdAt || 0);
+        });
+      default:
+        return sorted;
+    }
+  }
+
   function trim(str) { return (str || '').trim(); }
 
   function render(prompts) {
@@ -76,8 +105,9 @@
     emptyEl.hidden = true;
     countEl.textContent = String(prompts.length);
 
+    const sortedPrompts = sortPrompts(prompts, currentSort);
     const frag = document.createDocumentFragment();
-    prompts.forEach(p => {
+    sortedPrompts.forEach(p => {
       const node = cardTemplate.content.firstElementChild.cloneNode(true);
       node.dataset.id = p.id;
       node.querySelector('.card-title').textContent = p.title;
@@ -273,6 +303,12 @@
 
   function init() {
     form.addEventListener('submit', handleSubmit);
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        render(loadPrompts());
+      });
+    }
     render(loadPrompts());
     setupImportExport();
   }
